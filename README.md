@@ -11,14 +11,14 @@ Install it with one line:
 
 or with Homebrew:
 
-    brew install twimba/stuurman/stuurman
-    stuurman install
+    brew tap twimba/stuurman
+    brew install stuurman && stuurman install
 
 The first line downloads the command for your machine, checks it against its
 SHA-256, installs it and runs `stuurman install`. To read the script before
 you run it, open https://install.stuurman.io/install.sh (the address in the
 line holds the same script, which a browser shows badly). `stuurman upgrade`
-brings a Ship to the latest version (with Homebrew: `brew upgrade stuurman`, then
+brings a Ship to the latest version (with Homebrew: `brew update && brew upgrade stuurman`, then
 `stuurman upgrade`).
 
 What is here: the Homebrew formula (`Formula/stuurman.rb`), the install script

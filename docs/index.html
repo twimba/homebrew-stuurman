@@ -166,7 +166,7 @@ main() {
     bindir="$HOME/.local/bin"
   fi
   if [ -L "$bindir/stuurman" ]; then
-    refuse "$bindir/stuurman is a link, not a file (Homebrew's, if stuurman was installed with brew: run brew upgrade stuurman instead). Remove the link to install here, then run the install line again."
+    refuse "$bindir/stuurman is a link, not a file (Homebrew's, if stuurman was installed with brew: run brew update && brew upgrade stuurman instead). Remove the link to install here, then run the install line again."
   fi
   [ ! -d "$bindir/stuurman" ] || refuse "$bindir/stuurman is a folder; remove it and run the install line again."
 
