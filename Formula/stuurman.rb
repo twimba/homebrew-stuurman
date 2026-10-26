@@ -8,23 +8,23 @@ class Stuurman < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.0/stuurman_v0.8.0_darwin_arm64.tar.gz"
-      sha256 "127a043bba5cc5b150d0d5a5b895edb7d48cb07fb8b56dd628aeda5874c09452"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_darwin_arm64.tar.gz"
+      sha256 "c0b87c1c01d2dc77d202313a3289d3e5ea07b0fcef7a0691531da704a12025f1"
     end
     on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.0/stuurman_v0.8.0_darwin_amd64.tar.gz"
-      sha256 "b80e2e5f757a869a6ddce0f931e7cd69659e8cc2480d6a01a7a8bc35a54b4f1f"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_darwin_amd64.tar.gz"
+      sha256 "9e02b55c6762f1cfc9485a429de9e644eea36844c881b6747e06f374ac5f8baf"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.0/stuurman_v0.8.0_linux_arm64.tar.gz"
-      sha256 "726f6c0bc30ac605daaba26fbc5a7229bf3cff4d771dd98eefa9de73e3a858cd"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_linux_arm64.tar.gz"
+      sha256 "dcbfa7d78550e1ca90501c71818382999e36a79515f7adbe6df7d7228dacf847"
     end
     on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.0/stuurman_v0.8.0_linux_amd64.tar.gz"
-      sha256 "fca88cd728205bffe961c9c773aaf94e91b2a6c338c610571f2e9d47438f4259"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_linux_amd64.tar.gz"
+      sha256 "6d2b90a426f022d6fd001dd892fb1730a76706f29db062559d4d1db242885bd3"
     end
   end
 
@@ -39,6 +39,6 @@ class Stuurman < Formula
   end
 
   test do
-    assert_match "stuurman v0.8.0", shell_output("#{bin}/stuurman version")
+    assert_match "stuurman v0.8.1", shell_output("#{bin}/stuurman version")
   end
 end
