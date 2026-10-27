@@ -10,23 +10,23 @@ class StuurmanUnstable < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.5/stuurman_v0.9.0-rc.5_darwin_arm64.tar.gz"
-      sha256 "9aec8e5a02abd63c59cc1963230e6f092f953b4bf7d03eb5da4f333c59be9bab"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.6/stuurman_v0.9.0-rc.6_darwin_arm64.tar.gz"
+      sha256 "e26230c42aa415a6ee178bfdbe8801928629ea28a79320f30939f768c065d105"
     end
     on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.5/stuurman_v0.9.0-rc.5_darwin_amd64.tar.gz"
-      sha256 "4aff2d826314fdf6444e30761031f26a8cf3e4cf9f3bcf1fee67c4e9ed52d25c"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.6/stuurman_v0.9.0-rc.6_darwin_amd64.tar.gz"
+      sha256 "de28541bcb925010a80edca96b63e1729acf0c89485c35dcb109e114a5f3962d"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.5/stuurman_v0.9.0-rc.5_linux_arm64.tar.gz"
-      sha256 "9b989b53a28aa8d18c39fb8b5369fe4f03f4e18f95c8c732ddc7b3d8a45bbe8f"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.6/stuurman_v0.9.0-rc.6_linux_arm64.tar.gz"
+      sha256 "a5bbc3587ceff96ec5f6d9c7ce331236df2e622284332fc2ee32772bd626acab"
     end
     on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.5/stuurman_v0.9.0-rc.5_linux_amd64.tar.gz"
-      sha256 "4d5743457b088acad4c9ede53f299aa502bc757d9d9bf47c19f43b094c60f868"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0-rc.6/stuurman_v0.9.0-rc.6_linux_amd64.tar.gz"
+      sha256 "c2d9b3cfba7317a27feb0c3dcab1e1632aedb600f09c60c8aa4ec5e2e094497f"
     end
   end
 
@@ -42,6 +42,6 @@ class StuurmanUnstable < Formula
   end
 
   test do
-    assert_match "stuurman v0.9.0-rc.5", shell_output("#{bin}/stuurman-unstable version")
+    assert_match "stuurman v0.9.0-rc.6", shell_output("#{bin}/stuurman-unstable version")
   end
 end
