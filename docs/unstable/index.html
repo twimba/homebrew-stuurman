@@ -3,8 +3,8 @@
 #
 #   curl -fsSL https://install.stuurman.io | bash
 #
-# It downloads the stuurman command for this machine (macOS or Linux, amd64 or
-# arm64), checks it against its SHA-256, puts it in /usr/local/bin (or in
+# It downloads the stuurman command for this machine (a Mac with Apple silicon,
+# or Linux on arm64), checks it against its SHA-256, puts it in /usr/local/bin (or in
 # ~/.local/bin when that folder cannot be written; it never runs sudo) and
 # runs `stuurman install`, which starts a Ship. Docker with Compose is needed;
 # `stuurman install` checks it. Arguments go on to `stuurman install`:
@@ -139,9 +139,8 @@ main() {
     *) refuse "Stuurman runs on macOS and Linux, not on $(uname -s)." ;;
   esac
   case "$(uname -m)" in
-    x86_64 | amd64) arch=amd64 ;;
     arm64 | aarch64) arch=arm64 ;;
-    *) refuse "Stuurman runs on amd64 and arm64 machines, not on $(uname -m)." ;;
+    *) refuse "Stuurman runs on arm64 machines only (a Mac with Apple silicon, or Linux on arm64), and this one is $(uname -m). On a Mac with Apple silicon, run it in a terminal that does not use Rosetta." ;;
   esac
 
   if command -v curl >/dev/null 2>&1; then
