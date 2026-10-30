@@ -1,30 +1,24 @@
 # The Homebrew formula of the stuurman command. It is written for each release
-# from a template (the release fills in its tag and the four SHA-256 values);
+# from a template (the release fills in its tag and the two SHA-256 values);
 # a change made here by hand is lost with the next release. Homebrew reads the
 # version from the urls.
 class Stuurman < Formula
   desc "Command that installs and runs a Ship crewed by AI crew members"
   homepage "https://install.stuurman.io"
 
+  depends_on arch: :arm64
+
   on_macos do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_darwin_arm64.tar.gz"
-      sha256 "c0b87c1c01d2dc77d202313a3289d3e5ea07b0fcef7a0691531da704a12025f1"
-    end
-    on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_darwin_amd64.tar.gz"
-      sha256 "9e02b55c6762f1cfc9485a429de9e644eea36844c881b6747e06f374ac5f8baf"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0/stuurman_v0.9.0_darwin_arm64.tar.gz"
+      sha256 "b22291a61069da3494a6014d63f10d3c517ca335143a5d94cc18bf5b1e74b21d"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_linux_arm64.tar.gz"
-      sha256 "dcbfa7d78550e1ca90501c71818382999e36a79515f7adbe6df7d7228dacf847"
-    end
-    on_intel do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.8.1/stuurman_v0.8.1_linux_amd64.tar.gz"
-      sha256 "6d2b90a426f022d6fd001dd892fb1730a76706f29db062559d4d1db242885bd3"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.0/stuurman_v0.9.0_linux_arm64.tar.gz"
+      sha256 "43bf9cdeaef08c188058eeb56e5ba4732de130f62e7b6606b396963b8833e4fa"
     end
   end
 
@@ -39,6 +33,6 @@ class Stuurman < Formula
   end
 
   test do
-    assert_match "stuurman v0.8.1", shell_output("#{bin}/stuurman version")
+    assert_match "stuurman v0.9.0", shell_output("#{bin}/stuurman version")
   end
 end

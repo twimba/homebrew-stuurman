@@ -3,8 +3,8 @@
 #
 #   curl -fsSL https://install.stuurman.io | bash
 #
-# It downloads the stuurman command for this machine (macOS or Linux, amd64 or
-# arm64), checks it against its SHA-256, puts it in /usr/local/bin (or in
+# It downloads the stuurman command for this machine (a Mac with Apple silicon,
+# or Linux on arm64), checks it against its SHA-256, puts it in /usr/local/bin (or in
 # ~/.local/bin when that folder cannot be written; it never runs sudo) and
 # runs `stuurman install`, which starts a Ship. Docker with Compose is needed;
 # `stuurman install` checks it. Arguments go on to `stuurman install`:
@@ -13,12 +13,21 @@
 #
 # STUURMAN_VERSION=v1.2.3 installs that version instead of the latest one.
 #
+# The copy at https://install.stuurman.io/unstable/ installs stuurman-unstable,
+# the same command that also follows release candidates: it is this script
+# with the two lines below rewritten by scripts/render-tap.sh --unstable, so it
+# reads unstable/latest (a release candidate or a release), installs the
+# command as stuurman-unstable beside any stuurman and runs
+# `stuurman-unstable install`.
+#
 # Everything below is a function; the last line runs it, in braces. A download
 # that was cut off anywhere, inside the last line too, therefore runs nothing.
 set -eu
+command_name=stuurman
+latest_path=latest
 
 refuse() {
-  printf 'stuurman: %s\n' "$*" >&2
+  printf '%s: %s\n' "$command_name" "$*" >&2
   exit 1
 }
 
@@ -130,9 +139,8 @@ main() {
     *) refuse "Stuurman runs on macOS and Linux, not on $(uname -s)." ;;
   esac
   case "$(uname -m)" in
-    x86_64 | amd64) arch=amd64 ;;
     arm64 | aarch64) arch=arm64 ;;
-    *) refuse "Stuurman runs on amd64 and arm64 machines, not on $(uname -m)." ;;
+    *) refuse "Stuurman runs on arm64 machines only (a Mac with Apple silicon, or Linux on arm64), and this one is $(uname -m). On a Mac with Apple silicon, run it in a terminal that does not use Rosetta." ;;
   esac
 
   if command -v curl >/dev/null 2>&1; then
@@ -157,18 +165,19 @@ main() {
   downloads="$(base STUURMAN_DOWNLOAD_BASE "${STUURMAN_DOWNLOAD_BASE:-}" https://github.com/twimba/homebrew-stuurman/releases/download)" || exit 1
 
   # Where the command goes: decided, and looked at, before anything is
-  # downloaded. A link there is not replaced: it is Homebrew's when stuurman
-  # was installed with brew, and brew would no longer know its own install.
+  # downloaded. A link there is not replaced: it is Homebrew's when the
+  # command was installed with brew, and brew would no longer know its own
+  # install.
   if [ -d /usr/local/bin ] && [ -w /usr/local/bin ]; then
     bindir=/usr/local/bin
   else
     [ -n "${HOME:-}" ] || refuse "/usr/local/bin cannot be written and HOME is not set; set HOME and run the install line again."
     bindir="$HOME/.local/bin"
   fi
-  if [ -L "$bindir/stuurman" ]; then
-    refuse "$bindir/stuurman is a link, not a file (Homebrew's, if stuurman was installed with brew: run brew update && brew upgrade stuurman instead). Remove the link to install here, then run the install line again."
+  if [ -L "$bindir/$command_name" ]; then
+    refuse "$bindir/$command_name is a link, not a file (Homebrew's, if $command_name was installed with brew: run brew update && brew upgrade $command_name instead). Remove the link to install here, then run the install line again."
   fi
-  [ ! -d "$bindir/stuurman" ] || refuse "$bindir/stuurman is a folder; remove it and run the install line again."
+  [ ! -d "$bindir/$command_name" ] || refuse "$bindir/$command_name is a folder; remove it and run the install line again."
 
   WORK="$(mktemp -d "${TMPDIR:-/tmp}/stuurman-install.XXXXXXXX")" || refuse "A temporary folder could not be made in ${TMPDIR:-/tmp}; set TMPDIR to a folder that can be written and run the install line again."
   trap cleanup EXIT
@@ -180,13 +189,17 @@ main() {
   if [ -n "$version" ]; then
     is_version "$version" any || refuse "STUURMAN_VERSION must be a version like v1.2.3."
   else
-    fetch "$pages/latest" "$WORK/latest" || refuse "The latest version could not be read from $pages/latest; check the connection and run the install line again."
-    version="$(cat "$WORK/latest")" || refuse "The latest version could not be read from $pages/latest; run the install line again."
-    is_version "$version" stable || refuse "$pages/latest does not hold a version; run the install line again later."
+    # stuurman takes only a release from latest; stuurman-unstable takes a
+    # release candidate from unstable/latest too.
+    kind=stable
+    [ "$latest_path" = latest ] || kind=any
+    fetch "$pages/$latest_path" "$WORK/latest" || refuse "The latest version could not be read from $pages/$latest_path; check the connection and run the install line again."
+    version="$(cat "$WORK/latest")" || refuse "The latest version could not be read from $pages/$latest_path; run the install line again."
+    is_version "$version" "$kind" || refuse "$pages/$latest_path does not hold a version; run the install line again later."
   fi
 
   name="stuurman_${version}_${os}_${arch}.tar.gz"
-  printf 'Downloading stuurman %s for %s on %s.\n' "$version" "$os" "$arch"
+  printf 'Downloading %s %s for %s on %s.\n' "$command_name" "$version" "$os" "$arch"
   fetch "$downloads/$version/checksums.txt" "$WORK/checksums.txt" || refuse "$downloads/$version/checksums.txt could not be downloaded; check the connection and run the install line again."
   fetch "$downloads/$version/$name" "$WORK/$name" || refuse "$downloads/$version/$name could not be downloaded; check the connection and run the install line again."
 
@@ -217,32 +230,34 @@ main() {
     refuse "$name could not be unpacked or holds no file named stuurman; nothing was installed."
   fi
 
-  # Copied beside its place and renamed, so the place never holds half a file.
+  # Copied beside its place and renamed, so the place never holds half a
+  # file. The tarball's stuurman is installed under the command's own name:
+  # stuurman-unstable knows itself by it.
   mkdir -p -- "$bindir" || refuse "The folder $bindir could not be made; make it and run the install line again."
-  STAGED="$bindir/.stuurman.new.$$"
+  STAGED="$bindir/.$command_name.new.$$"
   if command -v install >/dev/null 2>&1; then
-    install -m 0755 -- "$WORK/build/stuurman" "$STAGED" || refuse "stuurman could not be written into $bindir; make the folder writable and run the install line again."
+    install -m 0755 -- "$WORK/build/stuurman" "$STAGED" || refuse "$command_name could not be written into $bindir; make the folder writable and run the install line again."
   else
-    { cp -- "$WORK/build/stuurman" "$STAGED" && chmod 0755 -- "$STAGED"; } || refuse "stuurman could not be written into $bindir; make the folder writable and run the install line again."
+    { cp -- "$WORK/build/stuurman" "$STAGED" && chmod 0755 -- "$STAGED"; } || refuse "$command_name could not be written into $bindir; make the folder writable and run the install line again."
   fi
-  mv -f -- "$STAGED" "$bindir/stuurman" || refuse "stuurman could not be written into $bindir; make the folder writable and run the install line again."
+  mv -f -- "$STAGED" "$bindir/$command_name" || refuse "$command_name could not be written into $bindir; make the folder writable and run the install line again."
   STAGED=""
-  printf 'Installed %s.\n' "$bindir/stuurman"
+  printf 'Installed %s.\n' "$bindir/$command_name"
   # shellcheck disable=SC2016 # $PATH is printed as it is typed
   case ":${PATH:-}:" in
     *":$bindir:"*) ;;
-    *) printf '%s is not on your PATH. Add it (the line export PATH="%s:$PATH" in the start file of your shell does that), or run %s by its full path.\n' "$bindir" "$bindir" "$bindir/stuurman" ;;
+    *) printf '%s is not on your PATH. Add it (the line export PATH="%s:$PATH" in the start file of your shell does that), or run %s by its full path.\n' "$bindir" "$bindir" "$bindir/$command_name" ;;
   esac
-  other="$(command -v stuurman 2>/dev/null || true)"
-  if [ -n "$other" ] && [ "$other" != "$bindir/stuurman" ]; then
-    printf 'Another stuurman, %s, comes first on your PATH.\n' "$other"
+  other="$(command -v "$command_name" 2>/dev/null || true)"
+  if [ -n "$other" ] && [ "$other" != "$bindir/$command_name" ]; then
+    printf 'Another %s, %s, comes first on your PATH.\n' "$command_name" "$other"
   fi
 
   # exec leaves no shell behind to run the EXIT trap: clean up first.
   cleanup
   WORK=""
   trap - EXIT
-  exec "$bindir/stuurman" install "$@"
+  exec "$bindir/$command_name" install "$@"
 }
 
 { main "$@"; }
