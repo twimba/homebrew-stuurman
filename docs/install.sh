@@ -11,6 +11,11 @@
 #
 #   curl -fsSL https://install.stuurman.io | bash -s -- --dir ~/ship --port 9000
 #
+# With restore as the first argument it runs `stuurman restore` with the rest
+# instead, which restores a Ship from a backup rather than starting a new one:
+#
+#   curl -fsSL https://install.stuurman.io | bash -s -- restore <backup file>
+#
 # STUURMAN_VERSION=v1.2.3 installs that version instead of the latest one.
 #
 # The copy at https://install.stuurman.io/unstable/ installs stuurman-unstable,
@@ -257,6 +262,10 @@ main() {
   cleanup
   WORK=""
   trap - EXIT
+  if [ "${1:-}" = restore ]; then
+    shift
+    exec "$bindir/$command_name" restore "$@"
+  fi
   exec "$bindir/$command_name" install "$@"
 }
 
