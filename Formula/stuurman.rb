@@ -10,15 +10,15 @@ class Stuurman < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.1/stuurman_v0.9.1_darwin_arm64.tar.gz"
-      sha256 "f80d9f73dd244f94647859f1a678bdf01375f01b65a1767f815a0e5702927e78"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.2/stuurman_v0.9.2_darwin_arm64.tar.gz"
+      sha256 "abea1cd8e333fd7a1e80ac55487e981b949baea2d69d01067a6a9aaf1c37a2ae"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.1/stuurman_v0.9.1_linux_arm64.tar.gz"
-      sha256 "d501a70a87215a2803d73e8fbb7a14ec98232a63eca649c3d8d3a1de8a4d0dd6"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.9.2/stuurman_v0.9.2_linux_arm64.tar.gz"
+      sha256 "4c6bd04a543f7cdf8ff5e78b949b1308f08c63f55e48255e545312db079f9d56"
     end
   end
 
@@ -33,6 +33,6 @@ class Stuurman < Formula
   end
 
   test do
-    assert_match "stuurman v0.9.1", shell_output("#{bin}/stuurman version")
+    assert_match "stuurman v0.9.2", shell_output("#{bin}/stuurman version")
   end
 end
