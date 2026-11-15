@@ -12,15 +12,15 @@ class StuurmanUnstable < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.11.0-rc.8/stuurman_v0.11.0-rc.8_darwin_arm64.tar.gz"
-      sha256 "47cd95255cbc17e102fa5b62192174a43de5f04f4e5df31a9f0e761e5c858c6d"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.11.0-rc.10/stuurman_v0.11.0-rc.10_darwin_arm64.tar.gz"
+      sha256 "1259473951c79fd6e1d1d0887033eb9a31e77f7d5fd50ca457c90fb8657615d5"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.11.0-rc.8/stuurman_v0.11.0-rc.8_linux_arm64.tar.gz"
-      sha256 "7cd22421a9d600fea6a73a6aa4b1c0761a0905d404051151ec919f93abca5d84"
+      url "https://github.com/twimba/homebrew-stuurman/releases/download/v0.11.0-rc.10/stuurman_v0.11.0-rc.10_linux_arm64.tar.gz"
+      sha256 "18a2282187772f16ae98fa1677a49b0da9ca0f7f096540dc45145cbcff67f381"
     end
   end
 
@@ -36,6 +36,6 @@ class StuurmanUnstable < Formula
   end
 
   test do
-    assert_match "stuurman v0.11.0-rc.8", shell_output("#{bin}/stuurman-unstable version")
+    assert_match "stuurman v0.11.0-rc.10", shell_output("#{bin}/stuurman-unstable version")
   end
 end
